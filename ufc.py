@@ -1,12 +1,17 @@
 import requests as req
+from ddgs import DDGS
+import cloudscraper
 from lxml import html
 import datetime as dt
-import math
-import re
+
 
 def parse_sherdog_fighter(url):
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"}
-    htm = req.get(url, headers = headers)
+    scraper = cloudscraper.create_scraper()
+    
+    htm = scraper.get(url, headers = headers)
+    
+    print(htm.text[:1000])
     xml = html.document_fromstring(htm.content)
     
     
@@ -23,7 +28,7 @@ def parse_sherdog_fighter(url):
 
     fighter = {
         'name' : xml.xpath("//span[@class='fn']/text()")[0],
-        'nickname' : bio.xpath("//span[@class='nickname']/em/text()")[0],
+        'nickname' : (bio.xpath("//span[@class='nickname']/em/text()") or [""])[0],
         'nationality' : bio.xpath("//strong[@itemprop='nationality']/text()")[0],
         'birthplace' : xml.xpath("//span[@class='locality']/text()")[0],
         'birthdate' : xml.xpath("//span[@itemprop='birthDate']/text()")[0],
@@ -115,18 +120,18 @@ def search(query):
     return xml.xpath("//h3/parent::a/@href")
 
 def get_sherdog_link(query):
-    possible_urls = search(query+" Sherdog")
-    for url in possible_urls:
-        if ("sherdog.com/fighter/" in url) and (not "/news/" in url):
-            return url
-    raise BaseException("Sherdog link not found !")
+    with DDGS() as ddgs:
+        results = ddgs.text(f"{query} site:sherdog.com/fighter", max_results=5)
+        for res in results:
+            url = res['href']
+            if "sherdog.com/fighter/" in url and "/news/" not in url:
+                return url
+    raise BaseException("Sherdog link not found!")
+
     
 def get_ufc_link(query):
-    possible_urls = search(query+" UFC.com")
-    for url in possible_urls:
-        if ("ufc.com/athlete/" in url):
-            return url
-    raise BaseException("UFC link not found !")
+    url = "https://ufc.com/fighter/" + query
+    return url
     
 def get_fighter(query):
     sherdog_link = get_sherdog_link(query)

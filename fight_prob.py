@@ -1,3 +1,8 @@
-from ufc import get_event
+from ufc import get_sherdog_link, parse_sherdog_fighter
 
-print(get_event('UFC-290'))
+sherdog_link = get_sherdog_link('Ilia Topuria')
+print("Sherdog URL:", sherdog_link)
+
+
+fighter_data = parse_sherdog_fighter(sherdog_link)
+print(fighter_data)

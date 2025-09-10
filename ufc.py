@@ -11,7 +11,7 @@ def parse_sherdog_fighter(url):
     
     htm = scraper.get(url, headers = headers)
     
-    print(htm.text[:1000])
+   
     xml = html.document_fromstring(htm.content)
     
     
@@ -80,7 +80,8 @@ def parse_sherdog_fighter(url):
 
 def get_ufc_stats(url):
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"}
-    htm = req.get(url, headers = headers)
+    scraper = cloudscraper.create_scraper()
+    htm = scraper.get(url, headers = headers)
     xml = html.document_fromstring(htm.content)
 
     distance = xml.xpath("//div[@class='c-stat-3bar__value']/text()")
@@ -130,7 +131,11 @@ def get_sherdog_link(query):
 
     
 def get_ufc_link(query):
-    url = "https://ufc.com/fighter/" + query
+    k = query.lower().split()
+    smth = "-".join(k)
+    print(smth)
+    
+    url = "https://ufc.com/athlete/" + smth
     return url
     
 def get_fighter(query):

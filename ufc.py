@@ -132,10 +132,10 @@ def get_sherdog_link(query):
     
 def get_ufc_link(query):
     k = query.lower().split()
-    smth = "-".join(k)
-    print(smth)
+    athlete_name = "-".join(k)
+    print(athlete_name)
     
-    url = "https://ufc.com/athlete/" + smth
+    url = "https://ufc.com/athlete/" + athlete_name
     return url
     
 def get_fighter(query):
@@ -155,7 +155,10 @@ def get_upcoming_event_links():
     return ["https://www.ufc.com/"+x for x in xml.xpath("//details[@id='events-list-upcoming']/div/div/div/div/div/section/ul/li/article/div[1]/div/a/@href")]
 
 def get_ufc_link_event(query):
-    url = "https://ufc.com/event/" + query
+    filtered_query = "-".join(query.split())
+    
+    url = "https://ufc.com/event/" + filtered_query
+
     return url
     
 def get_ranking(fight, corner):
@@ -186,7 +189,8 @@ def get_name(fight, corner):
 def parse_event(url, past=True):
     
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"}
-    htm = req.get(url, headers = headers)
+    scraper = cloudscraper.create_scraper()
+    htm = scraper.get(url, headers = headers)
     xml = html.document_fromstring(htm.content)
     fights_html = xml.xpath("//div[@class='fight-card']/div/div/section/ul/li")
     

@@ -201,12 +201,13 @@ def parse_event(url, past=True):
 
     date = dt.datetime.fromtimestamp(int(xml.xpath("//div[@class='c-hero__bottom-text']/div[1]/@data-timestamp")[0]))
     date = date.strftime("%Y-%m-%d")
-    location = xml.xpath("//div[@class='c-hero__bottom-text']/div[2]/div/text()")[0].split(",")
+    location = [part.strip() for part in xml.xpath("//div[@class='c-hero__bottom-text']/div[2]/div/text()")[0].split(",")]
+
 
     event = {
         'name': name,
         'date': date,
-        'location': location[1].strip(),
+        'location': location[1].replace('\n', ' ').strip(),
         'venue': location[0].strip(),
         'fights': []
     }

@@ -1,6 +1,6 @@
 from ufc import get_sherdog_link, parse_sherdog_fighter, get_fighter, get_event
 
-print(get_event("UFC 294"))
+print(get_event("UFC 322"))
 
 
 """ 

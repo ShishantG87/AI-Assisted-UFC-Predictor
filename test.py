@@ -1,4 +1,29 @@
-from ai21 import AI21Client
+from google import genai
+
+client = genai.Client(api_key = "AIzaSyBSvOZV14MKSH1RMabGgHaiNBsVT9uD8j0") #AIzaSyBSvOZV14MKSH1RMabGgHaiNBsVT9uD8j0 = api key
+
+response = client.models.generate_content(
+    model = "gemini-2.5-flash",
+    contents = "Illia vs Islam give me ur opinion with percentages"
+        )
+print(response.text)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'''from ai21 import AI21Client
 from ai21.models.chat import ChatMessage
 
 messages = [
@@ -13,4 +38,4 @@ response = client.chat.completions.create(
     model="jamba-large",
     max_tokens=1024,
 )
-print(response[0])
+print(response[0]) '''

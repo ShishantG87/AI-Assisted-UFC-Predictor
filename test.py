@@ -4,7 +4,9 @@ client = genai.Client(api_key = "AIzaSyBSvOZV14MKSH1RMabGgHaiNBsVT9uD8j0") #AIza
 
 response = client.models.generate_content(
     model = "gemini-2.5-flash",
-    contents = "Illia vs Islam give me ur opinion with percentages"
+    contents = "Illia vs Islam give me ur opinion with percentages",
+    config=types.GenerateContentConfig(
+        thinking_config=types.ThinkingConfig(thinking_budget=0)
         )
 print(response.text)
 

@@ -234,11 +234,11 @@ def parse_event(url, past=True):
             finished_round = fight.xpath("div//div[@class='c-listing-fight__result-text round']/text()")
             finished_time = fight.xpath("div//div[@class='c-listing-fight__result-text time']/text()")
             
-            this_fight['round'] = finished_round[0]
-            this_fight['time'] = finished_time[0]
-            this_fight['method'] = method[0]
-            this_fight['red corner']['result'] = result[0].strip()
-            this_fight['blue corner']['result'] = result[1].strip()
+            this_fight['round'] = (finished_round or [""])[0]
+            this_fight['time'] = (finished_time or [""])[0]
+            this_fight['method'] = (method or [""])[0]
+            this_fight['red corner']['result'] = (result or [""])[0].strip()
+            this_fight['blue corner']['result'] = (result or ["",""])[1].strip()
         event['fights'].append(this_fight)
     return event
 
